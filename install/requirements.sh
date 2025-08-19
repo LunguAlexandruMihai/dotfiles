@@ -8,6 +8,8 @@ PKG_LIST="${1:-packages.txt}"   # pass a file path or default to packages.txt
 NONINTERACTIVE="${NONINTERACTIVE:-0}"  # set to 1 to skip prompts
 PAC_OPTS=${PAC_OPTS:-"--needed --noconfirm"}
 YAY_OPTS=${YAY_OPTS:-"--needed --noconfirm"}
+declare -a ALREADY INST_OFFICIAL INST_AUR FAILED
+ALREADY=(); INST_OFFICIAL=(); INST_AUR=(); FAILED=()
 # -----------------------------
 
 # --- helpers ---------------------------------------------------------------
@@ -120,14 +122,14 @@ fi
 if [[ ${#INST_OFFICIAL[@]} -gt 0 ]]; then
   spin "Installing from official repos: ${#INST_OFFICIAL[@]} pkg(s)" \
     bash -c "sudo pacman -S $PAC_OPTS ${INST_OFFICIAL[*]}" \
-    || FAILED+=("${INST_OFFICIAL[@]}")
+    || { (( ${#INST_OFFICIAL[@]} )) && FAILED+=("${INST_OFFICIAL[@]}"); }
 fi
 
 # AUR
 if [[ ${#INST_AUR[@]} -gt 0 ]]; then
   spin "Installing from AUR via yay: ${#INST_AUR[@]} pkg(s)" \
     bash -c "yay -S $YAY_OPTS ${INST_AUR[*]}" \
-    || FAILED+=("${INST_AUR[@]}")
+    || { (( ${#INST_AUR[@]} )) && FAILED+=("${INST_AUR[@]}"); }
 fi
 
 # Final report
@@ -143,21 +145,26 @@ for pkg in "${SELECTED_PKGS[@]}"; do
 done
 
 # Build nice summary lines
-summ_already=$( [[ ${#ALREADY[@]} -gt 0 ]] && printf '%s ' "${ALREADY[@]}" || echo '(none)' )
-summ_now=$( [[ ${#NOW_INSTALLED[@]} -gt 0 ]] && printf '%s ' "${NOW_INSTALLED[@]}" || echo '(none)' )
-summ_failed=""
-if [[ ${#FAILED[@]} -gt 0 ]]; then
-  # de-dup failed just in case
+summ_already=$( (( ${#ALREADY[@]} )) && printf '%s ' "${ALREADY[@]}" || echo '(none)' )
+summ_now=$( (( ${#NOW_INSTALLED[@]} )) && printf '%s ' "${NOW_INSTALLED[@]}" || echo '(none)' )
+
+if (( ${#FAILED[@]} )); then
   mapfile -t FAILED < <(printf '%s\n' "${FAILED[@]}" | sort -u)
   summ_failed=$(printf '%s ' "${FAILED[@]}")
 else
   summ_failed="(none)"
 fi
 
-gum style \
-  "Already installed:  $summ_already" \
-  "Installed now:      $summ_now" \
-  "Failed/need review: $summ_failed"
+gum style --border normal --padding "0 1" --border-foreground 60 \
+  "$(gum style --foreground 36  "Official repo:") $(
+      if (( ${#INST_OFFICIAL[@]} )); then printf '%s ' "${INST_OFFICIAL[@]}"; else echo '(none)'; fi
+    )" \
+  "$(gum style --foreground 178 "AUR via yay:") $(
+      if (( ${#INST_AUR[@]} )); then printf '%s ' "${INST_AUR[@]}"; else echo '(none)'; fi
+    )" \
+  "$(gum style --foreground 244 "Already installed:") $(
+      if (( ${#ALREADY[@]} )); then printf '%s ' "${ALREADY[@]}"; else echo '(none)'; fi
+    )"
 
 # Optional: show logs on failure
 if [[ "$summ_failed" != "(none)" && "$NONINTERACTIVE" != 1 ]]; then
