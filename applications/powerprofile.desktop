@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Power Profile Settings
+Comment=PowerProfile
+Exec=powerprofile-change
+Type=Application
+Terminal=false

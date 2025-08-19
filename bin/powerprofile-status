@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ppctl() { powerprofilesctl "$@" 2>/dev/null || true; }
+
+profile="$(ppctl get)"
+case "$profile" in
+  performance) icon="";  cls="performance" ;;
+  balanced)    icon="";  cls="balanced" ;;
+  power-saver) icon="";  cls="power-saver" ;;
+  *)           icon="";  cls="unknown"; profile="${profile:-unknown}" ;;
+esac
+
+# Tooltip is optional; if ppd isn't running, it'll be empty.
+tooltip="$(ppctl list | sed -n '1,200p')"
+
+# Build JSON safely with Python (present on most systems).
+# This avoids needing jq and guarantees valid JSON.
+TEXT="$icon $profile" CLASS="$cls" ALT="$profile" DETAILS="$tooltip" \
+python3 - "$@" <<'PY'
+import json, os, sys
+obj = {
+  "text": os.environ.get("TEXT",""),
+  "class": os.environ.get("CLASS",""),
+  "alt": os.environ.get("ALT",""),
+  "tooltip": os.environ.get("DETAILS",""),
+}
+sys.stdout.write(json.dumps(obj))
+PY
