@@ -5,7 +5,7 @@ set -euo pipefail
 cp -R ~/dotfiles/config/* ~/.config/
 
 mkdir -p ~/.local/share/themes/my
-cp -R ~/dotfiles/themes/my/* ~/.local/share/themes/my/
+cp -R ~/dotfiles/local/share/themes/my/* ~/.local/share/themes/my/
 
 echo 'source ~/.zsh_profile' >> ~/.zshrc
 
