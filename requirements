@@ -83,7 +83,8 @@ ufw
 ufw-docker
 eza
 flatpak
-gdm
+greetd
+greetd-regreet
 power-profiles-daemon
 fprintd
 neovim
