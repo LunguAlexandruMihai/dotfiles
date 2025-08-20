@@ -100,3 +100,4 @@ libappindicator-gtk3
 python-gpgme
 nautilus-dropbox
 steam
+mise

@@ -37,8 +37,8 @@ gum style --border double --padding "1 2" --border-foreground 212 "zsh is alread
 
 cd ~/dotfiles
 source ./install/requirements.sh
-source ./install/configs.sh
 source ./install/apps.sh
+source ./install/configs.sh
 
 sudo systemctl enable --now gdm.service
 

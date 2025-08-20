@@ -11,13 +11,6 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
-# Install candy theme
-THEME_DIR="$HOME/.oh-my-zsh/custom/themes"
-mkdir -p "$THEME_DIR"
-if [ ! -d "$THEME_DIR/candy-zsh" ]; then
-    git clone https://github.com/candycane/candy-zsh.git "$THEME_DIR/candy-zsh"
-fi
-
 # Change shell to zsh
 chsh -s "$(which zsh)"
 

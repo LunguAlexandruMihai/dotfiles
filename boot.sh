@@ -2,8 +2,7 @@
 
 set -euo pipefail
 
-sudo pacman -Sy --noconfirm --needed git
-
-git clone "git@github.com:LunguAlexandruMihai/dotfiles.git" ~/ >/dev/null
+chmod +x install.sh
+chmod +x install/*
 
 source ~/dotfiles/install.sh
