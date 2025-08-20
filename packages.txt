@@ -101,3 +101,7 @@ python-gpgme
 nautilus-dropbox
 steam
 mise
+php
+composer
+php-sqlite
+wl-screenrec

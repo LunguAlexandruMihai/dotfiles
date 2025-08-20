@@ -1,0 +1,6 @@
+eval "$(mise activate zsh)"
+eval "$(zoxide init bash)"
+export EDITOR="nvim"
+export HYPRSHOT_DIR="~/Screenshots"
+export SUDO_EDITOR="$EDITOR"
+export PATH=$HOME/.local/bin:$PATH

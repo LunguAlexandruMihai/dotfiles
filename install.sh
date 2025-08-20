@@ -37,9 +37,15 @@ gum style --border double --padding "1 2" --border-foreground 212 "zsh is alread
 
 cd ~/dotfiles
 source ./install/requirements.sh
-source ./install/apps.sh
 source ./install/configs.sh
 
-sudo systemctl enable --now gdm.service
+source ./install/desktop/apps.sh
+source ./install/desktop/applestudiocontrol.sh
+source ./install/desktop/flatpaks.sh
+
+source ./install/shell/ohmyzsh.sh
+source ./install/shell/docker.sh
+source ./install/shell/ufw.sh
+source ./install/shell/devel.sh
 
 gum style --border rounded --padding "1 2" --border-foreground 35 "All selected steps completed."

@@ -12,39 +12,10 @@ declare -a ALREADY INST_OFFICIAL INST_AUR FAILED
 ALREADY=(); INST_OFFICIAL=(); INST_AUR=(); FAILED=()
 # -----------------------------
 
+
 # --- helpers ---------------------------------------------------------------
 die() { echo "Error: $*" >&2; exit 1; }
 have() { command -v "$1" &>/dev/null; }
-
-# Require pacman and yay
-have pacman || die "pacman not found."
-if ! have yay; then
-  echo "yay not found. Trying to install 'yay' via pacman (if packaged) or suggest manual install..."
-  echo "Please install yay (AUR helper) before running this script."
-  exit 1
-fi
-
-# Require gum or offer to install
-if ! have gum; then
-  echo "gum not found."
-  if pacman -Si gum &>/dev/null; then
-    read -r -p "Install gum from official repos now? [Y/n] " yn
-    yn=${yn:-Y}
-    if [[ "$yn" =~ ^[Yy]$ ]]; then
-      sudo pacman -S --noconfirm gum
-    else
-      die "gum is required. Install it and rerun."
-    fi
-  else
-    read -r -p "Install gum from AUR via yay now? [Y/n] " yn
-    yn=${yn:-Y}
-    if [[ "$yn" =~ ^[Yy]$ ]]; then
-      yay -S --noconfirm gum
-    else
-      die "gum is required. Install it and rerun."
-    fi
-  fi
-fi
 
 # Read and sanitize package list
 [[ -f "$PKG_LIST" ]] || die "Package list file not found: $PKG_LIST"
@@ -121,14 +92,14 @@ fi
 # Official
 if [[ ${#INST_OFFICIAL[@]} -gt 0 ]]; then
   spin "Installing from official repos: ${#INST_OFFICIAL[@]} pkg(s)" \
-    bash -c "sudo pacman -S $PAC_OPTS ${INST_OFFICIAL[*]}" \
+    bash -c "sudo pacman -S ${INST_OFFICIAL[*]} $PAC_OPTS" \
     || { (( ${#INST_OFFICIAL[@]} )) && FAILED+=("${INST_OFFICIAL[@]}"); }
 fi
 
 # AUR
 if [[ ${#INST_AUR[@]} -gt 0 ]]; then
   spin "Installing from AUR via yay: ${#INST_AUR[@]} pkg(s)" \
-    bash -c "yay -S $YAY_OPTS ${INST_AUR[*]}" \
+    bash -c "yay -S ${INST_AUR[*]} $YAY_OPTS" \
     || { (( ${#INST_AUR[@]} )) && FAILED+=("${INST_AUR[@]}"); }
 fi
 
