@@ -29,6 +29,8 @@ if ! have gum; then
   fi
 fi
 
+source ~/dotfiles/install/enable-multilib.sh
+
 if ! have zsh; then
   gum style --border double --padding "1 2" --border-foreground 212 "zsh is not installed. Starting zsh setup..."
   source ~/dotfiles/install/zsh.sh
@@ -38,12 +40,10 @@ fi
 gum style --border double --padding "1 2" --border-foreground 212 "zsh is already installed."
 
 
-source ~/dotfiles/install/requirements.sh
+source ~/dotfiles/install/packages.sh
 source ~/dotfiles/install/configs.sh
 
-source ~/dotfiles/install/desktop/apps.sh
-source ~/dotfiles/install/desktop/applestudiocontrol.sh
-source ~/dotfiles/install/desktop/flatpaks.sh
+source ~/dotfiles/install/desktop.sh
 
 source ~/dotfiles/install/shell.sh
 source ~/dotfiles/install/devel.sh

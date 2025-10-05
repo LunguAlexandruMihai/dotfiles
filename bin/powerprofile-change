@@ -32,7 +32,7 @@ done
 
 # Show Walker (dmenu module). If Walker isn't running as a service, this still works.
 # Cancel returns non-zero; we don't error out because of `|| true`.
-choice="$(printf "%s" "$menu" | walker --dmenu -p 'Power Profile' 2>/dev/null || true)"
+choice="$(printf "%s" "$menu" | rofi -dmenu 2>/dev/null || true)"
 
 # User hit Esc / clicked outside
 [[ -z "${choice:-}" ]] && exit 0

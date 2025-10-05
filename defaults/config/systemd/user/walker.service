@@ -1,0 +1,12 @@
+[Unit]
+Description=Walker launcher for Hyprland
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=walker --gapplication-service
+Restart=on-failure
+Environment=XDG_CURRENT_DESKTOP=Hyprland
+
+[Install]
+WantedBy=graphical-session.target

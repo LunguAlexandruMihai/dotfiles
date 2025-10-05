@@ -8,6 +8,8 @@ hyprsunset
 polkit-gnome
 hyprland-qtutils
 walker-bin
+elephant
+elephant-desktopapplications
 libqalculate
 waybar
 swaync
@@ -66,7 +68,6 @@ tldr
 less
 whois
 plocate
-bash-completion
 alacritty
 ttf-font-awesome
 ttf-cascadia-mono-nerd
@@ -112,3 +113,4 @@ firefox-developer-edition
 discord
 visual-studio-code-bin
 git-cola
+mesa

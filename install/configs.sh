@@ -4,10 +4,7 @@ set -euo pipefail
 
 mkdir -p ~/Screenshots
 
-cp -R ~/dotfiles/config/* ~/.config/
-
-mkdir -p ~/.local/share/themes
-cp -R ~/dotfiles/local/share/theme/* ~/.local/share/theme/
+cp -R ~/dotfiles/defaults/config/* ~/.config/
 
 cp ~/dotfiles/defaults/.zsh_profile ~/
 cp ~/dotfiles/defaults/.zsh_aliases ~/

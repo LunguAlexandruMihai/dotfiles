@@ -15,8 +15,6 @@ alias r='rails'
 alias gcm='git commit -m'
 alias gcam='git commit -a -m'
 
-alias zed = "zeditor"
-
 alias vim = "nvim"
 
 alias bw= 'flatpak run --command=bw com.bitwarden.desktop'

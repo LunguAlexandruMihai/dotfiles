@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/screenrec"
+PID_FILE="$STATE_DIR/wl-screenrec.pid"
+META_FILE="$STATE_DIR/recording.json"
+
+jq_safe() { command -v jq >/dev/null 2>&1 && jq -r "$1" "$2" 2>/dev/null || echo ""; }
+
+if [[ -f "$PID_FILE" ]] && ps -p "$(cat "$PID_FILE")" >/dev/null 2>&1; then
+  file=$(jq_safe '.file' "$META_FILE")
+  started=$(jq_safe '.started_at' "$META_FILE")
+  echo '{"text": "󰻂", "tooltip": "Stop recording", "class": "active"}'
+else
+  echo '{"text": ""}'
+fi
