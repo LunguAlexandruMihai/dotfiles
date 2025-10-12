@@ -1,0 +1,189 @@
+{
+  "layer": "top",
+  "position": "top",
+  "autohide": true,
+  "autohide-blocked": false,
+  "exclusive": true,
+  "passthrough": false,
+  "gtk-layer-shell": true,
+  "modules-left": [
+    "custom/archicon",
+    "clock",
+    "cpu",
+    "memory",
+    "temperature",
+  ],
+  "modules-center": ["hyprland/workspaces", "custom/screenrecording-indicator"],
+  "modules-right": [
+    "idle_inhibitor",
+    "pulseaudio",
+    "pulseaudio#microphone",
+    "bluetooth",
+    "network",
+    "battery",
+    "custom/powerprofile",
+    "custom/power",
+  ],
+  // Modules left
+  "custom/archicon": {
+    "format": "",
+    "on-click": "uwsm app -- fuzzel",
+    "tooltip": false,
+  },
+  "cpu": {
+    "format": "{usage}% ",
+    "tooltip": true,
+    "tooltip-format": "Uso de CPU: {usage}%\nNúcleos: {cores}",
+    "on-click": "alacritty --class=Activity --title=Activity -e btop",
+  },
+  "memory": {
+    "format": "{}% 󰍛",
+    "tooltip": true,
+    "tooltip-format": "{used} / {total} ({percentage}%)",
+    "on-click": "alacritty --class=Activity --title=Activity -e btop",
+  },
+  "temperature": {
+    //"thermal-zone": 1,
+    "interval": "4",
+    "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
+    "critical-threshold": 74,
+    "format-critical": "  {temperatureC}°C",
+    "format": "{temperatureC}°C {icon}",
+    "format-icons": ["", "", ""],
+  },
+
+  // Modules center
+  "hyprland/workspaces": {
+    "disable-scroll": false,
+    "all-outputs": true,
+    "show-special": true,
+    "on-scroll-up": "hyprctl dispatch workspace m-1",
+    "on-scroll-down": "hyprctl dispatch workspace m+1",
+    "on-click": "activate",
+    "format": "{icon}",
+    "format-icons": {
+      "default": "",
+      "active": "",
+    },
+    "persistent-workspaces": {
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": "",
+      "5": "",
+      "6": ""
+    },
+    "sort-by-number": true
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15,
+    },
+    "format": "<span size='13000' foreground='#a6e3a1'>{icon} </span> {capacity}%",
+    "format-warning": "<span size='13000' foreground='#B1E3AD'>{icon} </span> {capacity}%",
+    "format-critical": "<span size='13000' foreground='#E38C8F'>{icon} </span> {capacity}%",
+    "format-charging": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
+    "format-plugged": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
+    "format-alt": "<span size='13000' foreground='#B1E3AD'>{icon} </span> {time}",
+    "format-full": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
+    "format-icons": ["", "", "", "", ""],
+    "tooltip-format": "{time}",
+  },
+  "network": {
+    "format-wifi": "<span size='13000' foreground='#f5e0dc'>  </span>{essid}",
+    "format-ethernet": "<span size='13000' foreground='#f5e0dc'>󰤭  </span> Disconnected",
+    "format-linked": "{ifname} (No IP) ",
+    "format-disconnected": "<span size='13000' foreground='#f5e0dc'>  </span>Disconnected",
+    "tooltip-format-wifi": "Signal Strenght: {signalStrength}%",
+    "on-click": "alacritty --class=Impala --title=Impala -e impala",
+  },
+  "bluetooth": {
+    "format": "",
+    "format-disabled": "󰂲",
+    "format-connected": "",
+    "tooltip-format": "Devices connected: {num_connections}",
+    "on-click": "blueberry",
+  },
+  "idle_inhibitor": {
+    "tooltip": false,
+    "format": "{icon}",
+    "start-activated": false,
+    "format-icons": {
+      "activated": " ",
+      "deactivated": " ",
+    },
+  },
+  "clock": {
+    "locale": "en_US.UTF-8",
+    "timezone": "Europe/Bucharest",
+    "format": "<span foreground='#f5c2e7'>   </span>{:%a %d %H:%M}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "on-click": "gnome-calendar",
+    "calendar": {
+      "mode": "year",
+      "mode-mon-col": 3,
+      "format": {
+        "months": "<span color='#504945'><b>{}</b></span>",
+        "days": "<span color='#ebdbb2'><b>{}</b></span>",
+        "weeks": "<span color='#928374'><b>W{}</b></span>",
+        "weekdays": "<span color='#7c6f64'><b>{}</b></span>",
+        "today": "<span color='#d79921'><b><u>{}</u></b></span>",
+      },
+    },
+  },
+
+  "custom/powerprofile": {
+    "exec": "powerprofile-status",
+    "return-type": "json",
+    "interval": 2, // fallback refresh
+    "signal": 8, // allow manual refresh via SIGRTMIN+8
+    "format": "{text}",
+    "on-click": "powerprofile-change",
+  },
+
+  "custom/screenrecording-indicator": {
+    "exec": "screenrec_status",
+    "on-click": "screenrec toggle-stop",
+    "signal": 8,
+    "return-type": "json"
+  },
+
+  "pulseaudio": {
+    "format": "<span color='#a6e3a1'>{icon} </span><span color='#cdd6f4'>{volume}%</span>",
+    "format-bluetooth": "<span color='#a6e3a1'>{icon}</span>  <span color='#cdd6f4'>{volume}%</span>",
+    "tooltip": false,
+    "format-muted": "<span color='#f38ba8'>󰝟</span>",
+    "on-scroll-up": "wpctl set-volume @DEFAULT_SINK@ 10%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_SINK@ 10%-",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": [
+        "",
+        "",
+        "",
+      ]
+    },
+    "on-click": "alacritty --class=Wiremix --title=Wiremix -e wiremix",
+  },
+  "custom/power": {
+    "format": "",
+    "tooltip": false,
+    "on-click": "power-menu",
+  },
+  "pulseaudio#microphone": {
+    "format": "{format_source}",
+    "format-source": "",
+    "tooltip": false,
+    "format-source-muted": " ",
+    "on-click": "pamixer --default-source -t",
+    "on-scroll-up": "pamixer --default-source -i 2",
+    "on-scroll-down": "pamixer --default-source -d 2",
+    "scroll-step": 5,
+  }
+}

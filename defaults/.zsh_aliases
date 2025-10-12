@@ -1,0 +1,21 @@
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+alias ls='eza -lh --group-directories-first --icons=auto'
+alias lsa='ls -a'
+alias lt='eza --tree --level=2 --long --icons --git'
+alias lta='lt -a'
+alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
+
+alias g='git'
+alias d='docker'
+alias r='rails'
+
+alias gcm='git commit -m'
+alias gcam='git commit -a -m'
+
+alias vim= "nvim"
+
+alias bw= 'flatpak run --command=bw com.bitwarden.desktop'
+alias zen= 'flatpak run --branch=stable --arch=x86_64 app.zen_browser.zen'

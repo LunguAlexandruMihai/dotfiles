@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Parse powerprofilesctl list → profiles[] and current
+profiles=()
+current=""
+
+while IFS= read -r line; do
+  # Match ONLY top-level profile lines like "* balanced:" or "performance:"
+  if [[ "$line" =~ ^[[:space:]]*\*?[[:space:]]*([a-zA-Z0-9_-]+):[[:space:]]*$ ]]; then
+    name="${BASH_REMATCH[1]}"
+    profiles+=("$name")
+    [[ "$line" =~ ^[[:space:]]*\* ]] && current="$name"
+  fi
+done < <(powerprofilesctl list)
+
+# Fallback if parsing failed for any reason
+if [[ ${#profiles[@]} -eq 0 ]]; then
+  profiles=(power-saver balanced performance)
+  current="$(powerprofilesctl get 2>/dev/null || echo balanced)"
+fi
+
+# Build the menu; star the active one
+menu=""
+for p in "${profiles[@]}"; do
+  if [[ "$p" == "$current" ]]; then
+    menu+="★ $p"$'\n'
+  else
+    menu+="$p"$'\n'
+  fi
+done
+
+# Show Walker (dmenu module). If Walker isn't running as a service, this still works.
+# Cancel returns non-zero; we don't error out because of `|| true`.
+choice="$(printf "%s" "$menu" | rofi -dmenu 2>/dev/null || true)"
+
+# User hit Esc / clicked outside
+[[ -z "${choice:-}" ]] && exit 0
+
+# Strip the star if it came back with it
+choice="${choice#★ }"
+
+# If already active, nothing to do
+[[ "$choice" == "$current" ]] && exit 0
+
+# Apply the new profile
+exec powerprofilesctl set "$choice"

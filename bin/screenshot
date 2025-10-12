@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -euo pipefail
+
+MODE="${1:-region}"               # region | window | output
+DIR="$HOME/Pictures/Screenshots"  # single, fixed folder
+mkdir -p "$DIR"
+
+# unique filename without creating directories
+NAME="$(date +screenshot_%Y-%m-%d_%H-%M-%S).png"
+FILE="$DIR/$NAME"
+
+# hyprshot: -o is the directory, -f is the filename
+hyprshot -m "$MODE" -o "$DIR" -f "$NAME"
+
+# open in satty
+[ -f "$FILE" ] && satty -f "$FILE"
